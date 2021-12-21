@@ -1,0 +1,5 @@
+Controls
+
+- WASD to move character
+- Left shift to run
+- Spacebar to jump

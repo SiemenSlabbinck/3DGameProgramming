@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     float runSpeed = 5.0f;
 
     [SerializeField]
-    float walkSpeed = 1.5f;
+    float walkSpeed = 2.0f;
 
     [SerializeField]
     float jumpHeight = 1.0f;
