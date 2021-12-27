@@ -13,21 +13,26 @@ public class PlayerController : MonoBehaviour
     int isWalkingHash;
     int isRunningHash;
     int isJumpingHash;
+    int isWalkingLeftHash;
+    //int isWalkingRightHash;
+    //int isWalkingBackwardsHash;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 currentRunMovement;
+    Vector3 moveWalkDirection;
+    Vector3 moveRunDirection;
 
     bool isMovementPressed;
     bool isRunPressed;
     bool isJumpPressed = false;
     bool isJumping = false;
 
-    float rotationFactorPerFrame = 15.0f;
     float gravity = -9.81f;
     float groundedGravity = -0.05f;
     float verticalVelocity;
     float maxJumpTime = 0.5f;
+
 
     [SerializeField]
     float runSpeed = 5.0f;
@@ -47,6 +52,9 @@ public class PlayerController : MonoBehaviour
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
         isJumpingHash = Animator.StringToHash("isJumping");
+        isWalkingLeftHash = Animator.StringToHash("isWalkingLeft");
+        //isWalkingRightHash = Animator.StringToHash("isWalkingRight");
+        //isWalkingBackwardsHash = Animator.StringToHash("isWalkingBackwards");
 
         inputActions.PlayerControls.Move.started += MovementInputs;
         inputActions.PlayerControls.Move.canceled += MovementInputs;
@@ -56,10 +64,13 @@ public class PlayerController : MonoBehaviour
         inputActions.PlayerControls.Jump.started += Jump;
         inputActions.PlayerControls.Jump.canceled += Jump;
 
-        setupJumpVariables();
+
+        SetupJumpVariables();
     }
 
-    private void setupJumpVariables()
+
+
+    private void SetupJumpVariables()
     {
         float timeToApex = maxJumpTime / 2;
         gravity = (-2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
@@ -70,15 +81,15 @@ public class PlayerController : MonoBehaviour
     {
         HandleRotation();
         HandleAnimation();
-
         if (isRunPressed)
         {
-            characterController.Move(currentRunMovement * Time.deltaTime);
+            characterController.Move(moveRunDirection * Time.deltaTime);
         }
         else
         {
-            characterController.Move(currentMovement * Time.deltaTime);
+            characterController.Move(moveWalkDirection * Time.deltaTime);
         }
+        
         HandleGravity();
         HandleJump();
     }
@@ -121,8 +132,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(isJumpingHash, true);
             isJumping = true;
-            currentMovement.y = verticalVelocity;
-            currentRunMovement.y = verticalVelocity;
+            moveWalkDirection.y = verticalVelocity;
+            moveRunDirection.y = verticalVelocity;
         }else if (isJumping && characterController.isGrounded && !isJumpPressed)
         {
             isJumping = false;
@@ -132,7 +143,9 @@ public class PlayerController : MonoBehaviour
     {
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
-       
+        bool isWalkingLeft = animator.GetBool(isWalkingLeftHash);
+        //bool isWalkingRight = animator.GetBool(isWalkingRightHash);
+        //bool isWalkingBackwards = animator.GetBool(isWalkingBackwardsHash);
 
         if (isMovementPressed && !isWalking)
         {
@@ -151,25 +164,27 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(isRunningHash, false);
         }
-
+/*
+        if ((isMovementPressed && isWalking) && !isWalkingLeft)
+        {
+            animator.SetBool(isWalkingLeftHash, true);
+        }else if ((!isMovementPressed && !isWalking) && isWalkingLeft)
+        {
+            animator.SetBool(isWalkingLeftHash, false);
+        }*/
     }
 
     private void HandleRotation()
     {
-        Vector3 positionToLookAt;
+        float walkYStore = moveWalkDirection.y;
+        float runYStore = moveWalkDirection.y;
+        moveWalkDirection = (transform.forward * currentMovement.z) + (transform.right * currentMovement.x);
+        moveRunDirection = (transform.forward * currentRunMovement.z) + (transform.right * currentRunMovement.x);
 
-        positionToLookAt.x = currentMovement.x;
-        positionToLookAt.y = 0.0f;
-        positionToLookAt.z = currentMovement.z;
-
-        Quaternion currentRotation = transform.rotation;
-
-        if (isMovementPressed)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
-            transform.rotation =  Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
-        }
-
+        moveWalkDirection = moveWalkDirection.normalized * walkSpeed;
+        moveRunDirection = moveRunDirection.normalized * runSpeed;
+        moveWalkDirection.y = walkYStore;
+        moveRunDirection.y = runYStore;
     }
 
     private void HandleGravity()
@@ -177,16 +192,16 @@ public class PlayerController : MonoBehaviour
         if (characterController.isGrounded)
         {
             animator.SetBool(isJumpingHash, false);
-            currentMovement.y = groundedGravity;
-            currentRunMovement.y = groundedGravity;
+            moveWalkDirection.y = groundedGravity;
+            moveRunDirection.y = groundedGravity;
         }
         else 
         {
-            
-            currentMovement.y += gravity * Time.deltaTime;
-            currentRunMovement.y += gravity * Time.deltaTime;
+            moveWalkDirection.y += gravity * Time.deltaTime;
+            moveRunDirection.y += gravity * Time.deltaTime;
         }
 
     }
+
 
 }

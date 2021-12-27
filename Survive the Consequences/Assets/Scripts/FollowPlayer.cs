@@ -1,19 +1,63 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class FollowPlayer : MonoBehaviour
 {
-    // Start is called before the first frame update
+    PlayerActions inputActions;
+
     public Transform target;
+    public Transform toLookAt;
     public Vector3 offset;
+    Vector2 mousePosition;
 
-    public float smoothSpeed = 0.125f;
+    //public bool useOffsetValues;
 
-    void FixedUpdate()
+    [SerializeField]
+    float mouseSensitivity = 5.0f;
+
+    private void Awake()
     {
-        Vector3 desiredPositon = target.position + offset;
-        Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPositon, smoothSpeed);
-        transform.position = smoothPosition;
+        inputActions = new PlayerActions();
+        inputActions.PlayerControls.Look.performed += MouseMovement;
     }
+
+    private void Start()
+    {
+        offset = target.position - transform.position;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    void LateUpdate()
+    {
+        MouseRotate();
+    }
+    private void MouseMovement(InputAction.CallbackContext callbackContext)
+    {
+        mousePosition = callbackContext.ReadValue<Vector2>();
+    }
+    private void MouseRotate()
+    {
+        mousePosition.x = mousePosition.x * mouseSensitivity * Time.deltaTime;
+        target.Rotate(0, mousePosition.x, 0);
+
+        float desiredYAngle = target.eulerAngles.y;
+
+        Quaternion rotation = Quaternion.Euler(0, desiredYAngle, 0);
+        transform.position = target.position - (rotation * offset);
+        transform.LookAt(toLookAt);
+    }
+  
+    private void OnEnable()
+    {
+        inputActions.PlayerControls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.PlayerControls.Disable();
+    }
+
 }

@@ -65,7 +65,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Look"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""951e9ca9-b20a-46c3-8d93-9ffcea68dfb2"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
