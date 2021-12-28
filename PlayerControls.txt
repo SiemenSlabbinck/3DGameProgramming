@@ -3,3 +3,10 @@ Controls
 - WASD to move character
 - Left shift to run
 - Spacebar to jump
+
+
+character controller component
+- min move distance: 0
+- center: x - 0, y - 0.9, z - 0
+- radius : 0.5
+- height: 1.6
