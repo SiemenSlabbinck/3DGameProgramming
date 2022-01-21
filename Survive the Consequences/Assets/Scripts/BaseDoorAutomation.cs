@@ -13,13 +13,11 @@ public class BaseDoorAutomation : MonoBehaviour
 
     bool playerIsHere;
 
-    // Start is called before the first frame update
     void Start()
     {
         playerIsHere = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (playerIsHere && movingDoor.CompareTag("baseDoor_x"))

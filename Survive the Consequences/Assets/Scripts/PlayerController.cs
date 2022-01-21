@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour
     int isRunningHash;
     int isJumpingHash;
     int isWalkingLeftHash;
-    //int isWalkingRightHash;
-    //int isWalkingBackwardsHash;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -53,8 +51,6 @@ public class PlayerController : MonoBehaviour
         isRunningHash = Animator.StringToHash("isRunning");
         isJumpingHash = Animator.StringToHash("isJumping");
         isWalkingLeftHash = Animator.StringToHash("isWalkingLeft");
-        //isWalkingRightHash = Animator.StringToHash("isWalkingRight");
-        //isWalkingBackwardsHash = Animator.StringToHash("isWalkingBackwards");
 
         inputActions.PlayerControls.Move.started += MovementInputs;
         inputActions.PlayerControls.Move.canceled += MovementInputs;
@@ -144,8 +140,6 @@ public class PlayerController : MonoBehaviour
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
         bool isWalkingLeft = animator.GetBool(isWalkingLeftHash);
-        //bool isWalkingRight = animator.GetBool(isWalkingRightHash);
-        //bool isWalkingBackwards = animator.GetBool(isWalkingBackwardsHash);
 
         if (isMovementPressed && !isWalking)
         {
@@ -164,16 +158,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(isRunningHash, false);
         }
-/*
-        if ((isMovementPressed && isWalking) && !isWalkingLeft)
-        {
-            animator.SetBool(isWalkingLeftHash, true);
-        }else if ((!isMovementPressed && !isWalking) && isWalkingLeft)
-        {
-            animator.SetBool(isWalkingLeftHash, false);
-        }*/
     }
-
+    
     private void HandleRotation()
     {
         float walkYStore = moveWalkDirection.y;
