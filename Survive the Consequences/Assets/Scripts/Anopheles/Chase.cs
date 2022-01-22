@@ -5,17 +5,26 @@ using UnityEngine.AI;
 public class Chase : MonoBehaviour
 {
     public Transform player;
-    static Animator animate;
+
+    [SerializeField]
+    float moventSpeed = 5.0f;
+    float gravity = -9.81f;
+    float groundedGravity = -0.05f;
+
+    Vector3 movement;
+    Animator animate;
+    CharacterController characterController;
 
     private void Awake()
     {
         player = GameObject.Find("Lizzy").transform;
         animate  = GetComponent<Animator>();
+        characterController = GetComponent<CharacterController>();
     }
     void Update()
     {
         Vector3 direction = player.position - this.transform.position;
-
+        
         if (Vector3.Distance(player.position, this.transform.position) < 10)
         {
             direction.y = 0;
@@ -24,7 +33,8 @@ public class Chase : MonoBehaviour
             animate.SetBool("parasiteIsIdle", false);
             if (direction.magnitude > 2)
             {
-                this.transform.Translate(0, 0, 0.03f);
+                //this.transform.Translate(0, 0, 0.03f);
+                characterController.Move(moventSpeed * Time.deltaTime * direction.normalized);
                 animate.SetBool("parasiteIsWalking", true);
                 animate.SetBool("parasiteIsAttacking", false);
             }
@@ -40,6 +50,20 @@ public class Chase : MonoBehaviour
             animate.SetBool("parasiteIsWalking", false);
             animate.SetBool("parasiteIsAttacking", false);
         }
+        HandleGravity();
+    }
+
+    private void HandleGravity()
+    {
+        if (characterController.isGrounded)
+        {
+            movement.y = groundedGravity;
+        }
+        else
+        {
+            movement.y += gravity * Time.deltaTime;
+        }
+
     }
 }
 

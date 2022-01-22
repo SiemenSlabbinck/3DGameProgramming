@@ -139,7 +139,6 @@ public class PlayerController : MonoBehaviour
     {
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
-        bool isWalkingLeft = animator.GetBool(isWalkingLeftHash);
 
         if (isMovementPressed && !isWalking)
         {
