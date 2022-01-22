@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     {
         //Set Cursor to not be visible
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
     public void PlayLevel(int level){
         SceneManager.LoadScene(level);
