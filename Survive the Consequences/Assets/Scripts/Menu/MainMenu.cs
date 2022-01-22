@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    void Start()
+    {
+        //Set Cursor to not be visible
+        Cursor.visible = true;
+    }
     public void PlayLevel(int level){
         SceneManager.LoadScene(level);
     }

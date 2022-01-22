@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FireCollision : MonoBehaviour {
 
@@ -9,7 +10,6 @@ public class FireCollision : MonoBehaviour {
     private ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
     private bool timer = false;
     private float timeLeft = 3.0f;
-
     void OnParticleCollision(GameObject test) {
          Debug.Log("On Fire");
          timer = true;
@@ -23,7 +23,8 @@ public class FireCollision : MonoBehaviour {
      timeLeft -= Time.deltaTime;
      if ( timeLeft < 0 )
      {
-         Debug.Log("Die");
+        Debug.Log("Die");
+        SceneManager.LoadScene(4);
      }
     }
 }

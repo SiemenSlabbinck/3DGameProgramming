@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Level Scenes/WaterLevel.unity
     guid: c3b72d87558125c438e777d9e98ad8cd
+  - enabled: 1
+    path: Assets/Level Scenes/GameOver.unity
+    guid: d19c7c30502320f45ba1e6681d4210d7
   m_configObjects: {}
