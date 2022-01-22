@@ -33,7 +33,6 @@ public class Chase : MonoBehaviour
             animate.SetBool("parasiteIsIdle", false);
             if (direction.magnitude > 2)
             {
-                //this.transform.Translate(0, 0, 0.03f);
                 characterController.Move(moventSpeed * Time.deltaTime * direction.normalized);
                 animate.SetBool("parasiteIsWalking", true);
                 animate.SetBool("parasiteIsAttacking", false);

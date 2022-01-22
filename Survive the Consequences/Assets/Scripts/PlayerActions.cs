@@ -195,8 +195,8 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""59c729be-52c1-43cc-b00f-f04d9a1370b8"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""a1b6c336-3106-4a4e-982b-c42a51487ffe"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -13,7 +13,9 @@ public class PlayerController : MonoBehaviour
     int isWalkingHash;
     int isRunningHash;
     int isJumpingHash;
-    int isWalkingLeftHash;
+    int isAttackingHash;
+    int isRunGunHash;
+    //int isWalkingLeftHash;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
     bool isRunPressed;
     bool isJumpPressed = false;
     bool isJumping = false;
+    bool isAttackPressed;
 
     float gravity = -9.81f;
     float groundedGravity = -0.05f;
@@ -50,7 +53,9 @@ public class PlayerController : MonoBehaviour
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
         isJumpingHash = Animator.StringToHash("isJumping");
-        isWalkingLeftHash = Animator.StringToHash("isWalkingLeft");
+        isAttackingHash = Animator.StringToHash("isAttacking");
+        isRunGunHash = Animator.StringToHash("isRunGun");
+        //isWalkingLeftHash = Animator.StringToHash("isWalkingLeft");
 
         inputActions.PlayerControls.Move.started += MovementInputs;
         inputActions.PlayerControls.Move.canceled += MovementInputs;
@@ -59,12 +64,13 @@ public class PlayerController : MonoBehaviour
         inputActions.PlayerControls.Sprint.canceled += Run;
         inputActions.PlayerControls.Jump.started += Jump;
         inputActions.PlayerControls.Jump.canceled += Jump;
-
+        inputActions.PlayerControls.Attack.started += Attack;
+        inputActions.PlayerControls.Attack.canceled += Attack;
 
         SetupJumpVariables();
     }
 
-
+  
 
     private void SetupJumpVariables()
     {
@@ -88,6 +94,7 @@ public class PlayerController : MonoBehaviour
         
         HandleGravity();
         HandleJump();
+        HandleAttackAnimation();
     }
 
     private void OnEnable()
@@ -121,7 +128,10 @@ public class PlayerController : MonoBehaviour
         isJumpPressed = callbackContext.ReadValueAsButton();
         
     }
-
+    private void Attack(InputAction.CallbackContext callbackContext)
+    {
+        isAttackPressed = callbackContext.ReadValueAsButton();
+    }
     private void HandleJump()
     {
         if (!isJumping && characterController.isGrounded && isJumpPressed)
@@ -139,6 +149,7 @@ public class PlayerController : MonoBehaviour
     {
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
+        
 
         if (isMovementPressed && !isWalking)
         {
@@ -157,6 +168,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(isRunningHash, false);
         }
+
+        
     }
     
     private void HandleRotation()
@@ -172,6 +185,34 @@ public class PlayerController : MonoBehaviour
         moveRunDirection.y = runYStore;
     }
 
+    private void HandleAttackAnimation()
+    {
+        bool isAttacking = animator.GetBool(isAttackingHash);
+        bool isRunningGunning = animator.GetBool(isRunGunHash);
+
+        if (isAttackPressed && !isAttacking)
+        {
+            animator.SetBool(isAttackingHash, true);
+        }
+        else if (!isAttackPressed && isAttacking)
+        {
+            animator.SetBool(isAttackingHash, false);
+        }
+
+        if ((isRunPressed && isAttackPressed) && !isRunningGunning)
+        {
+            animator.SetBool(isRunGunHash, true);
+        }
+        else if ((isRunPressed && !isAttackPressed) && isRunningGunning)
+        {
+            animator.SetBool(isRunGunHash, false);
+        }
+        /*else if ((!isRunPressed && isAttackPressed) && isRunningGunning)
+        {
+            animator.SetBool(isRunGunHash, false);
+        }*/
+
+    }
     private void HandleGravity()
     {
         if (characterController.isGrounded)
