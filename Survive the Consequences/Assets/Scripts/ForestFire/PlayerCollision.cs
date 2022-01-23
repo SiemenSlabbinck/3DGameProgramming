@@ -8,7 +8,6 @@ public class PlayerCollision : MonoBehaviour
 
     [SerializeField]
     private GameObject Fire;
-    private ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
     private bool timer = false;
     private float timeLeft = 3.0f;
 
