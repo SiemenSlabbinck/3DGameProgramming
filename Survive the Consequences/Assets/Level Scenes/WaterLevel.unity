@@ -2619,7 +2619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1500772687}
   speed: 0
-  speedLevel: 0.002
+  speedLevel: 0.0018
 --- !u!82 &1309351500
 AudioSource:
   m_ObjectHideFlags: 0
