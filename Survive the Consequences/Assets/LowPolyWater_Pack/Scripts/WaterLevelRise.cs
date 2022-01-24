@@ -8,7 +8,6 @@ public class WaterLevelRise : MonoBehaviour
     public int speed;
     public float speedLevel;
 
-    // Start is called before the first frame update
     void Start()
     {
         if(target == null)
@@ -17,8 +16,6 @@ public class WaterLevelRise : MonoBehaviour
         }
         
     }
-
-    // Update is called once per frame
     void Update()
     {
         Vector3 a = transform.position;
