@@ -15,7 +15,9 @@ public class PlayerController : MonoBehaviour
     int isJumpingHash;
     int isAttackingHash;
     int isRunGunHash;
-    //int isWalkingLeftHash;
+
+    public GameObject bullet;
+    public Transform firePosition;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -27,7 +29,9 @@ public class PlayerController : MonoBehaviour
     bool isRunPressed;
     bool isJumpPressed = false;
     bool isJumping = false;
+    bool isAimPressed;
     bool isAttackPressed;
+    bool isEquipPresssed;
 
     float gravity = -9.81f;
     float groundedGravity = -0.05f;
@@ -55,7 +59,6 @@ public class PlayerController : MonoBehaviour
         isJumpingHash = Animator.StringToHash("isJumping");
         isAttackingHash = Animator.StringToHash("isAttacking");
         isRunGunHash = Animator.StringToHash("isRunGun");
-        //isWalkingLeftHash = Animator.StringToHash("isWalkingLeft");
 
         inputActions.PlayerControls.Move.started += MovementInputs;
         inputActions.PlayerControls.Move.canceled += MovementInputs;
@@ -64,13 +67,18 @@ public class PlayerController : MonoBehaviour
         inputActions.PlayerControls.Sprint.canceled += Run;
         inputActions.PlayerControls.Jump.started += Jump;
         inputActions.PlayerControls.Jump.canceled += Jump;
+        inputActions.PlayerControls.Aim.started += Aim;
+        inputActions.PlayerControls.Aim.canceled += Aim;
         inputActions.PlayerControls.Attack.started += Attack;
         inputActions.PlayerControls.Attack.canceled += Attack;
+        inputActions.PlayerControls.Equip.started += Equip;
+        inputActions.PlayerControls.Equip.canceled += Equip;
+
 
         SetupJumpVariables();
     }
 
-  
+
 
     private void SetupJumpVariables()
     {
@@ -91,10 +99,14 @@ public class PlayerController : MonoBehaviour
         {
             characterController.Move(moveWalkDirection * Time.deltaTime);
         }
-        
         HandleGravity();
         HandleJump();
+        HandleEquip();
         HandleAttackAnimation();
+        if (isAttackPressed && isAimPressed)
+        {
+            Shoot();
+        }
     }
 
     private void OnEnable()
@@ -128,9 +140,23 @@ public class PlayerController : MonoBehaviour
         isJumpPressed = callbackContext.ReadValueAsButton();
         
     }
+    private void Aim(InputAction.CallbackContext callbackContext)
+    {
+        isAimPressed = callbackContext.ReadValueAsButton();
+
+    }
     private void Attack(InputAction.CallbackContext callbackContext)
     {
         isAttackPressed = callbackContext.ReadValueAsButton();
+    }
+    private void Equip(InputAction.CallbackContext callbackContext)
+    {
+        isEquipPresssed = callbackContext.ReadValueAsButton();
+    }
+
+    private void HandleEquip()
+    {
+       
     }
     private void HandleJump()
     {
@@ -190,28 +216,34 @@ public class PlayerController : MonoBehaviour
         bool isAttacking = animator.GetBool(isAttackingHash);
         bool isRunningGunning = animator.GetBool(isRunGunHash);
 
-        if (isAttackPressed && !isAttacking)
+        if (isAimPressed && !isAttacking )
         {
             animator.SetBool(isAttackingHash, true);
         }
-        else if (!isAttackPressed && isAttacking)
+        else if (!isAimPressed && isAttacking)
         {
             animator.SetBool(isAttackingHash, false);
         }
-
-        if ((isRunPressed && isAttackPressed) && !isRunningGunning)
+        else if (isAimPressed && isAttacking && isMovementPressed)
         {
             animator.SetBool(isRunGunHash, true);
         }
-        else if ((isRunPressed && !isAttackPressed) && isRunningGunning)
+
+        if ((isRunPressed && isAimPressed) && !isRunningGunning)
+        {
+            animator.SetBool(isRunGunHash, true);
+        }
+        else if ((isRunPressed && !isAimPressed) && isRunningGunning)
         {
             animator.SetBool(isRunGunHash, false);
         }
-        /*else if ((!isRunPressed && isAttackPressed) && isRunningGunning)
-        {
-            animator.SetBool(isRunGunHash, false);
-        }*/
+        
 
+    }
+
+    private void Shoot()
+    {
+        Instantiate(bullet, firePosition.position, firePosition.rotation);
     }
     private void HandleGravity()
     {

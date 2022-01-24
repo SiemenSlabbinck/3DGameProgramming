@@ -20,6 +20,7 @@ public class Chase : MonoBehaviour
         player = GameObject.Find("Lizzy").transform;
         animate  = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
+
     }
     void Update()
     {
@@ -27,10 +28,12 @@ public class Chase : MonoBehaviour
         
         if (Vector3.Distance(player.position, this.transform.position) < 10)
         {
+            
             direction.y = 0;
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-
+            
             animate.SetBool("parasiteIsIdle", false);
+
             if (direction.magnitude > 2)
             {
                 characterController.Move(moventSpeed * Time.deltaTime * direction.normalized);

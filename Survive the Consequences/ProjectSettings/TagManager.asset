@@ -6,7 +6,9 @@ TagManager:
   tags:
   - baseDoor_x
   - baseDoor_z
+  - enemyCollisionTrigger
   - Enemy
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX

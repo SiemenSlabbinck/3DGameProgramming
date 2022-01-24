@@ -39,13 +39,14 @@ public class MouseDirectionController : MonoBehaviour
     {
         mousePosition.x = mousePosition.x * mouseSensitivity * Time.deltaTime;
         target.Rotate(0, mousePosition.x, 0);
+       
 
         float desiredYAngle = target.eulerAngles.y;
 
         Quaternion rotation = Quaternion.Euler(0, desiredYAngle, 0);
         transform.position = target.position - (rotation * offset);
     }
-  
+
     private void OnEnable()
     {
         inputActions.PlayerControls.Enable();
